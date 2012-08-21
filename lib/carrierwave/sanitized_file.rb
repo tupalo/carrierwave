@@ -208,6 +208,18 @@ module CarrierWave
     def delete
       FileUtils.rm(self.path) if exists?
     end
+  
+    ##
+    # Returns a File object, or nil if it does not exist.
+    #
+    # === Returns
+    #
+    # [File] a File object representing the SanitizedFile
+    #
+    def to_file
+      return @file if @file.is_a?(File)
+      File.open(path) if exists?
+    end
 
     ##
     # Returns the content type of the file.
