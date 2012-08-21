@@ -37,6 +37,7 @@ module CarrierWave
     autoload :Abstract, 'carrierwave/storage/abstract'
     autoload :File, 'carrierwave/storage/file'
     autoload :S3, 'carrierwave/storage/s3'
+    autoload :Fog, 'carrierwave/storage/fog'
     autoload :GridFS, 'carrierwave/storage/grid_fs'
     autoload :RightS3, 'carrierwave/storage/right_s3'
     autoload :CloudFiles, 'carrierwave/storage/cloud_files'
