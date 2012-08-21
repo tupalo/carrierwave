@@ -6,6 +6,7 @@ group :development do
   gem "activerecord", "~> 2.3.9"
   gem "rspec", :require => ['spec', 'spec/autorun']
   gem "aws"
+  gem "fog"
   gem "cucumber"
   gem "sqlite3-ruby"
   gem "dm-core"
