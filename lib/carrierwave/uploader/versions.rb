@@ -118,6 +118,16 @@ module CarrierWave
         end
       end
 
+      ##
+      # Recreate only one version and reprocess. This can be used to recreate
+      # a version if their parameters somehow have changed.
+      #
+      def recreate_version!(version)
+        with_callbacks(:recreate_version, file) do
+          send(version).store!(file)
+        end
+      end
+
     private
 
       def full_filename(for_file)
