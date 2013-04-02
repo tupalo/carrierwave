@@ -1,6 +1,6 @@
 # encoding: utf-8
 
-require 'net/http'
+require 'open-uri'
 
 module CarrierWave
   module Uploader
@@ -30,7 +30,14 @@ module CarrierWave
       private
 
         def file
-          @file ||= StringIO.new(Net::HTTP.get_response(@uri).body)
+          if @file.blank?
+            @file = Kernel.open(@uri.to_s)
+            @file = @file.is_a?(String) ? StringIO.new(@file) : @file
+          end
+          @file
+
+        rescue
+          raise CarrierWave::DownloadError, "could not download file"
         end
 
         def method_missing(*args, &block)
