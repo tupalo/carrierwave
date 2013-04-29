@@ -52,7 +52,7 @@ module CarrierWave
             return data[0,4] == "\xff\xd8\xff\xe0"
           end
           if extension == ".png"
-            return data[0,4].include?("‰PNG")
+            return data[0,4].include?("PNG")
           end
           if extension == ".gif"
             return data[0,4] == "GIF8"
