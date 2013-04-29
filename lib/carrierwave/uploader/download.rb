@@ -11,8 +11,10 @@ module CarrierWave
       depends_on CarrierWave::Uploader::Cache
 
       class RemoteFile
+
         def initialize(uri)
           @uri = URI.parse(uri)
+          @extension = File.extname(@uri.path)
         end
 
         def original_filename
@@ -31,13 +33,31 @@ module CarrierWave
 
         def file
           if @file.blank?
-            @file = Kernel.open(@uri.to_s)
+            3.times do
+              @file = Kernel.open(@uri.to_s)
+              break if validate_downloaded_file_type(@file, @extension)
+            end
             @file = @file.is_a?(String) ? StringIO.new(@file) : @file
           end
           @file
 
         rescue
           raise CarrierWave::DownloadError, "could not download file"
+        end
+
+        # see http://www.astro.keele.ac.uk/oldusers/rno/Computing/File_magic.html
+        def validate_downloaded_file_type(file, extension)
+          data = file.read(9)    
+          if extension == ".jpeg" || extension == ".jpg"
+            return data[0,4] == "\xff\xd8\xff\xe0"
+          end
+          if extension == ".png"
+            return data[0,4].include?("‰PNG")
+          end
+          if extension == ".gif"
+            return data[0,4] == "GIF8"
+          end
+          return true
         end
 
         def method_missing(*args, &block)
